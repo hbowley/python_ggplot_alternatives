@@ -1,0 +1,192 @@
+---
+title: "Python ggplot alternatives"
+format: html
+editor: visual
+toc: true
+theme: "journal"
+title-block-banner: "#F7879A"
+---
+
+#### Using Python to make data visuals as an R user 
+
+This package contains similar packages to the sample ones we automatically find installed within R studio. This link contains more packages with sample data sets: <https://towardsdatascience.com/datasets-in-python-425475a20eb1>
+
+```{python}
+
+
+import seaborn as sns
+
+## list datasets in the seaborn package
+
+print(sns.get_dataset_names())
+
+
+```
+
+## Let's use the diamonds data set
+
+```{python}
+### First lets import all the different libraries we will be using 
+
+# people say this is comparable to the tidyverse
+import pandas as pd
+
+# similar to ggplot
+import plotnine as pn
+
+# plots with js elements 
+import plotly.express as px
+
+# syntax similar to matlab
+import matplotlib.pyplot as matplt
+
+# plots that allow the user to import from the rendered markdown
+import altair as altr
+
+# Import diamonds dataset
+diamonds = sns.load_dataset('diamonds')
+
+diamonds.info()
+
+```
+
+## Bar graphs
+
+#### Plotnine package:
+
+This package is just like the ggplot2 package, one thing to note that instead of data = cars we see the ggplot(cars). In this case data = cars will give us an error
+
+```{python}
+## Plotnine which is equivalent to ggplot
+(pn.ggplot(diamonds) + 
+   pn.aes(x='cut') +
+   pn.geom_bar(size=20) + 
+   pn.coord_flip() +
+   pn.ggtitle('Number of Diamonds by Cut')
+)
+         
+```
+#### **Plotly** is pretty cool becuase she has interactive elements using java script
+```{python}
+## Plotly 
+
+px.histogram(
+diamonds, 
+y = "cut", 
+title= "Number of Diamonds by Cut"
+)
+
+```
+
+#### **Altair** also has some interactive elements like giving the viewer the option to save  
+
+My only issue is that I have not figure out how to make her a bigger size within a markdown document. Additionally altair can't deal with data having more than 5000 rows
+
+
+```{python}
+## Altair
+(
+  altr.Chart(
+   diamonds.sample(5000),
+   title = "Number of Diamonds by Cut"
+ )
+ .mark_bar()
+ .encode(
+    x = 'count()', y = altr.Y('cut')
+ )
+)
+```
+
+## Histogram
+#### Pandas
+
+```{python}
+(diamonds.sample(1000)['carat']
+ .plot
+ .hist(bins=20))
+```
+#### Matplotlib
+
+```{python}
+matplt.hist('carat', bins = 20, data = diamonds.sample(1000))
+```
+
+#### Plotnine
+
+```{python}
+(pn.ggplot(diamonds.sample(1000)) +
+      pn.aes(x = 'carat') +
+      pn.geom_histogram(binwidth = 0.1) +
+      pn.xlim(0,3)
+      )
+```
+#### Plotly
+```{python}
+px.histogram(
+  diamonds.sample(1000), x = 'carat'
+)
+```
+#### Altair
+```{python}
+(
+  altr.Chart(diamonds.sample(1000))
+  .mark_bar()
+  .encode(
+    altr.X('carat', bin = altr.Bin(step = 0.1)),
+    y = 'count()'
+)
+)
+```
+## Scatter Plot
+#### Pandas
+```{python}
+(
+diamonds.sample(1000)
+.plot
+.scatter(x = 'carat', y = 'price')
+.set(
+  title = 'Carat vs Diamond Price', 
+  xlabel = 'Diamond Carat',
+  ylabel = 'Diamond Price'
+  )
+)
+```
+#### Plotnine
+```{python}
+(
+  pn.ggplot(diamonds.sample(1000)) +
+    pn.aes(x = 'carat', y = 'price') + 
+    pn.geom_point() + 
+    pn.ggtitle('Carat vs Diamond Price') + 
+    pn.xlab('Diamond Carat')+
+    pn.ylab('Diamond Price')
+)
+```
+#### Plotly
+```{python}
+px.scatter(
+diamonds.sample(1000),
+x = 'carat',
+y = 'price',
+title = 'Diamond Carat vs Price',
+labels = dict(carat = 'Diamond Carat', price = 'Diamond Price')
+)
+```
+#### Altair
+
+```{python}
+altr.Chart(diamonds.sample(1000)).mark_circle().encode(
+    altr.X(
+        'carat',
+        title='Diamond Carat',
+    ),
+    altr.Y(
+        'price',
+        title='Diamond Price',
+    ),
+).properties(
+    title='Diamond Carat vs Diamond Price'
+)
+```
+
+
