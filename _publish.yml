@@ -1,0 +1,4 @@
+- source: python_ggplot_alternatives.qmd
+  quarto-pub:
+    - id: 481536a5-af81-48c0-bd52-8ee0278b3aa8
+      url: 'https://hbowley.quarto.pub/python-ggplot-alternatives'

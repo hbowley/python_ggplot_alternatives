@@ -66,7 +66,7 @@ This package is just like the ggplot2 package, one thing to note that instead of
 )
          
 ```
-#### **Plotly** is pretty cool becuase she has interactive elements using java script
+#### **Plotly** is pretty cool becuase it has interactive elements using java script
 ```{python}
 ## Plotly 
 
